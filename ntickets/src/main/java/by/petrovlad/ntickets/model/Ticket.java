@@ -1,4 +1,4 @@
-package by.petrovlad.ntickets.models;
+package by.petrovlad.ntickets.model;
 
 import javax.persistence.*;
 
@@ -29,7 +29,7 @@ public class Ticket {
     public Long getId() {
         return id;
     }
-    // ??
+    
     public void setId(Long id) {
         this.id = id;
     }

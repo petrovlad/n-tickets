@@ -1,4 +1,4 @@
-package by.petrovlad.ntickets.models;
+package by.petrovlad.ntickets.model;
 
 import javax.persistence.*;
 
@@ -10,6 +10,7 @@ import javax.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "u_id")
     private Long id;
 
     @Column(name = "u_login", nullable = false)
