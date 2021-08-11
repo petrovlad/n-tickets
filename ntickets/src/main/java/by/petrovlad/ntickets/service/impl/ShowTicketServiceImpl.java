@@ -21,15 +21,16 @@ public class ShowTicketServiceImpl implements ShowTicketService {
 
     @Override
     public TicketDTO getTicket(String ticketHash) throws ResourceNotFoundException {
+        RuntimeException exception = new ResourceNotFoundException(String.format("Cannot find ticket with hash = %s", ticketHash));
         Ticket ticket = ticketRepository
                 .findByUniqueHash(ticketHash)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Cannot find ticket with hash = %s", ticketHash)));
+                .orElseThrow(() -> exception);
 
         if (ticket.getReadingsCount() == 0) {
             ticketRepository.delete(ticket);
-            throw new ResourceNotFoundException(String.format("Cannot find ticket with hash = %s", ticketHash));
+            throw exception;
         }
-        // first we decrement readings counter, and then send it to client
+        // first we decrement readings counter, and then send it to the client
         ticket.setReadingsCount(ticket.getReadingsCount() - 1);
         ticketRepository.save(ticket);
 
