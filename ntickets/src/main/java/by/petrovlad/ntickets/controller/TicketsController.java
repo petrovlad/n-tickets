@@ -32,4 +32,9 @@ public class TicketsController {
     public void deleteTicket(@PathVariable String hash) {
         ticketsService.deleteTicket(hash);
     }
+
+    @PutMapping("{hash}")
+    public void updateTicket(@Valid @RequestBody TicketDTO ticket, @PathVariable String hash) {
+        ticketsService.updateTicket(ticket, hash);
+    }
 }

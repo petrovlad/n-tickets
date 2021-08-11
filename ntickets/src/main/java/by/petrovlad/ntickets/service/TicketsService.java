@@ -10,4 +10,5 @@ public interface TicketsService {
     TicketDTO createTicket(TicketDTO dto);
     void deleteTicket(Long id);
     void deleteTicket(String hash);
+    TicketDTO updateTicket(TicketDTO dto, String hash);
 }

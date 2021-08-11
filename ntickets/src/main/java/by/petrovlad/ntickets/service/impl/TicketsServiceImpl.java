@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class TicketsServiceImpl implements TicketsService {
@@ -60,6 +61,29 @@ public class TicketsServiceImpl implements TicketsService {
     public void deleteTicket(String hash) {
         if (ticketRepository.existsByUniqueHash(hash)) {
             ticketRepository.deleteByUniqueHash(hash);
+        }
+    }
+
+    @Override
+    public TicketDTO updateTicket(TicketDTO dto, String hash) {
+        dto.setUniqueHash(hash);
+        Ticket ticket = TicketMapper.mapToTicket(dto);
+        Optional<Ticket> optTicket = ticketRepository.findByUniqueHash(hash);
+        // if empty - create new, else - update
+        if (optTicket.isEmpty()) {
+            // we need to overwrite promoted hash value because of security reasons
+            // otherwise anyone can make his own hashes with any length
+            return createTicket(dto);
+        } else {
+            Ticket ticketDB = optTicket.get();
+            ticketDB.setAuthorId(ticket.getAuthorId());
+            ticketDB.setTitle(ticket.getTitle());
+            ticketDB.setContent(ticket.getContent());
+            ticketDB.setShowWarning(ticket.getShowWarning());
+            ticketDB.setReadingsCount(ticket.getReadingsCount());
+
+            ticketRepository.save(ticketDB);
+            return TicketMapper.mapToDTO(ticketDB);
         }
     }
 
