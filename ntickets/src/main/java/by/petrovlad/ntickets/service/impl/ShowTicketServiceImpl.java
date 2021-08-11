@@ -13,6 +13,7 @@ import java.util.stream.StreamSupport;
 
 @Service
 public class ShowTicketServiceImpl implements ShowTicketService {
+    private static final String EXC_TICKET_NOT_FOUND = "Cannot find ticket with hash = ";
     private final TicketRepository ticketRepository;
 
     public ShowTicketServiceImpl(TicketRepository repository) {
@@ -21,14 +22,13 @@ public class ShowTicketServiceImpl implements ShowTicketService {
 
     @Override
     public TicketDTO getTicket(String ticketHash) throws ResourceNotFoundException {
-        RuntimeException exception = new ResourceNotFoundException(String.format("Cannot find ticket with hash = %s", ticketHash));
         Ticket ticket = ticketRepository
                 .findByUniqueHash(ticketHash)
-                .orElseThrow(() -> exception);
+                .orElseThrow(() ->  new ResourceNotFoundException(EXC_TICKET_NOT_FOUND + ticketHash));
 
         if (ticket.getReadingsCount() == 0) {
             ticketRepository.delete(ticket);
-            throw exception;
+            throw new ResourceNotFoundException(EXC_TICKET_NOT_FOUND + ticketHash);
         }
         // first we decrement readings counter, and then send it to the client
         ticket.setReadingsCount(ticket.getReadingsCount() - 1);
