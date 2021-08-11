@@ -8,10 +8,6 @@ import by.petrovlad.ntickets.repository.UserRepository;
 import by.petrovlad.ntickets.service.TicketsService;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -30,21 +26,21 @@ public class TicketsServiceImpl implements TicketsService {
 
     @Override
     public List<TicketDTO> getTickets() {
-        List<TicketDTO> tickets = StreamSupport
+        return StreamSupport
                 .stream(ticketRepository.findAll().spliterator(), false)
                 .map(TicketMapper::mapToDTO)
+                .filter(ticketDTO -> ticketDTO.getReadingsCount() > 0)
                 .collect(Collectors.toList());
-        return tickets;
     }
 
     @Override
     // handle 0
     public List<TicketDTO> getTickets(Long authorId) {
-        List<TicketDTO> tickets = StreamSupport
+        return StreamSupport
                 .stream(ticketRepository.findAllByAuthorId(authorId).spliterator(), false)
                 .map(TicketMapper::mapToDTO)
+                .filter(ticketDTO -> ticketDTO.getReadingsCount() > 0)
                 .collect(Collectors.toList());
-        return tickets;
     }
 
     @Override
