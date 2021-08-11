@@ -17,6 +17,6 @@ public class ShowTicketController {
 
     @GetMapping
     public TicketDTO getTicket(@PathVariable String ticketHash) {
-        return null;
+        return showTicketService.getTicket(ticketHash);
     }
 }

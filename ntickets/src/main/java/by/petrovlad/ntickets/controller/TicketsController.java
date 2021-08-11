@@ -1,25 +1,29 @@
 package by.petrovlad.ntickets.controller;
 
+import by.petrovlad.ntickets.model.dto.TicketDTO;
 import by.petrovlad.ntickets.model.entity.Ticket;
-import by.petrovlad.ntickets.repository.TicketRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import by.petrovlad.ntickets.service.TicketsService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/tickets")
 public class TicketsController {
 
-    @Autowired
-    private TicketRepository ticketRepository;
+    private final TicketsService ticketsService;
+
+    public TicketsController(TicketsService ticketsService) {
+        this.ticketsService = ticketsService;
+    }
 
     @GetMapping
-    public Iterable<Ticket> getTickets() {
-        return ticketRepository.findAll();
+    public List<TicketDTO> getTickets() {
+        return ticketsService.getTickets();
     }
 
     @PostMapping
-    public Ticket newTicket(@RequestBody Ticket ticket) {
-        ticket = ticketRepository.save(ticket);
-        return ticket;
+    public TicketDTO newTicket(@RequestBody TicketDTO ticket) {
+        return ticketsService.createTicket(ticket);
     }
 }
