@@ -5,6 +5,7 @@ import by.petrovlad.ntickets.model.entity.Ticket;
 import by.petrovlad.ntickets.service.TicketsService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,7 @@ public class TicketsController {
     }
 
     @PostMapping
-    public TicketDTO newTicket(@RequestBody TicketDTO ticket) {
+    public TicketDTO newTicket(@Valid @RequestBody TicketDTO ticket) {
         return ticketsService.createTicket(ticket);
     }
 }

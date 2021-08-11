@@ -5,6 +5,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tickets")
+//@JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
