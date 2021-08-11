@@ -1,4 +1,4 @@
-package by.petrovlad.ntickets.model;
+package by.petrovlad.ntickets.model.entity;
 
 import javax.persistence.*;
 import java.util.Objects;
