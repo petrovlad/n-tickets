@@ -6,6 +6,7 @@ import by.petrovlad.ntickets.model.mapper.TicketMapper;
 import by.petrovlad.ntickets.repository.TicketRepository;
 import by.petrovlad.ntickets.repository.UserRepository;
 import by.petrovlad.ntickets.service.TicketsService;
+import by.petrovlad.ntickets.service.util.IterableUtil;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -26,21 +27,17 @@ public class TicketsServiceImpl implements TicketsService {
 
     @Override
     public List<TicketDTO> getTickets() {
-        return StreamSupport
-                .stream(ticketRepository.findAll().spliterator(), false)
-                .map(TicketMapper::mapToDTO)
-                .filter(ticketDTO -> ticketDTO.getReadingsCount() > 0)
-                .collect(Collectors.toList());
+        return IterableUtil.asList(ticketRepository.findAll(),
+                (Ticket t) -> t.getReadingsCount() > 0,
+                TicketMapper::mapToDTO);
     }
 
     @Override
     // handle 0
     public List<TicketDTO> getTickets(Long authorId) {
-        return StreamSupport
-                .stream(ticketRepository.findAllByAuthorId(authorId).spliterator(), false)
-                .map(TicketMapper::mapToDTO)
-                .filter(ticketDTO -> ticketDTO.getReadingsCount() > 0)
-                .collect(Collectors.toList());
+        return IterableUtil.asList(ticketRepository.findAllByAuthorId(authorId),
+                (Ticket t) -> t.getReadingsCount() > 0,
+                TicketMapper::mapToDTO);
     }
 
     @Override

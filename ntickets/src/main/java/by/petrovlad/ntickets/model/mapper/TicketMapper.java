@@ -4,6 +4,9 @@ import by.petrovlad.ntickets.model.dto.TicketDTO;
 import by.petrovlad.ntickets.model.entity.Ticket;
 
 public class TicketMapper {
+
+    private TicketMapper() {}
+
     public static Ticket mapToTicket(TicketDTO dto) {
         Ticket ticket = new Ticket();
 
