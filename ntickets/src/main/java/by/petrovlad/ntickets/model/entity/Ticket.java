@@ -4,7 +4,9 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tickets")
+@Table(name = "tickets", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "t_hash")
+})
 //@JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
 public class Ticket {
     @Id

@@ -27,4 +27,9 @@ public class TicketsController {
     public TicketDTO newTicket(@Valid @RequestBody TicketDTO ticket) {
         return ticketsService.createTicket(ticket);
     }
+
+    @DeleteMapping("{hash}")
+    public void deleteTicket(@PathVariable String hash) {
+        ticketsService.deleteTicket(hash);
+    }
 }
