@@ -2,14 +2,16 @@ package by.petrovlad.ntickets.service.impl;
 
 import by.petrovlad.ntickets.model.dto.TicketDTO;
 import by.petrovlad.ntickets.model.entity.Ticket;
-import by.petrovlad.ntickets.model.entity.User;
 import by.petrovlad.ntickets.model.mapper.TicketMapper;
 import by.petrovlad.ntickets.repository.TicketRepository;
 import by.petrovlad.ntickets.repository.UserRepository;
 import by.petrovlad.ntickets.service.TicketsService;
 import org.springframework.stereotype.Service;
 
+import java.security.Timestamp;
+import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -46,9 +48,16 @@ public class TicketsServiceImpl implements TicketsService {
     // check if user exists
     public TicketDTO createTicket(TicketDTO dto) {
         // generate empty(or not?) hash value
-        dto.setHash(Integer.toHexString(dto.hashCode()));
+        dto.setUniqueHash(generateUniqueHash(dto));
+
         Ticket ticket = TicketMapper.mapToTicket(dto);
         ticket = ticketRepository.save(ticket);
         return TicketMapper.mapToDTO(ticket);
+    }
+
+    public String generateUniqueHash(TicketDTO dto) {
+        return Integer.toHexString((dto.getAuthorId()).hashCode())
+                + Integer.toHexString(dto.getContent().hashCode())
+                + Long.toHexString(Instant.now().toEpochMilli() << 27);
     }
 }

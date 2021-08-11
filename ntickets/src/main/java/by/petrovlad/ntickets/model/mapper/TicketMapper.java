@@ -12,7 +12,7 @@ public class TicketMapper {
         ticket.setContent(dto.getContent());
         ticket.setShowWarning(dto.getShowWarning());
         ticket.setReadingsCount(dto.getReadingsCount());
-        ticket.setHash(Integer.valueOf(dto.getHash(), 16));
+        ticket.setUniqueHash(dto.getUniqueHash());
 
         return ticket;
     }
@@ -25,7 +25,7 @@ public class TicketMapper {
         dto.setContent(ticket.getContent());
         dto.setShowWarning(ticket.getShowWarning());
         dto.setReadingsCount(ticket.getReadingsCount());
-        dto.setHash(Integer.toHexString(ticket.getHash()));
+        dto.setUniqueHash(ticket.getUniqueHash());
 
         return dto;
     }

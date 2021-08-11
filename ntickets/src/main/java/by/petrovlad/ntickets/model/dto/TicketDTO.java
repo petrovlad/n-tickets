@@ -10,7 +10,7 @@ public class TicketDTO {
     private String content;
     private Boolean showWarning;
     private Integer readingsCount;
-    private String hash;
+    private String uniqueHash;
 
     public Long getAuthorId() {
         return authorId;
@@ -52,12 +52,12 @@ public class TicketDTO {
         this.readingsCount = readingsCount;
     }
 
-    public String getHash() {
-        return hash;
+    public String getUniqueHash() {
+        return uniqueHash;
     }
 
-    public void setHash(String hash) {
-        this.hash = hash;
+    public void setUniqueHash(String hash) {
+        this.uniqueHash = hash;
     }
 
     @Override

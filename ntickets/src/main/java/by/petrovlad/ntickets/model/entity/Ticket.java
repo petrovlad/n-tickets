@@ -28,14 +28,14 @@ public class Ticket {
     private Integer readingsCount;
 
     @Column(name = "t_hash", nullable = false)
-    private Integer hash;
+    private String uniqueHash;
 
-    public Integer getHash() {
-        return hash;
+    public String getUniqueHash() {
+        return uniqueHash;
     }
 
-    public void setHash(Integer hash) {
-        this.hash = hash;
+    public void setUniqueHash(String hash) {
+        this.uniqueHash = hash;
     }
 
     public Long getId() {
