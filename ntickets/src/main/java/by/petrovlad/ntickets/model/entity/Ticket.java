@@ -8,7 +8,7 @@ import java.util.Objects;
 //@JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
 public class Ticket {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "t_id")
     private Long id;
 

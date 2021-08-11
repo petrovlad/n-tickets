@@ -29,9 +29,8 @@ public class ShowTicketServiceImpl implements ShowTicketService {
 
     @Override
     public TicketDTO getTicket(String ticketHash) throws ResourceNotFoundException {
-        Integer hash = Integer.valueOf(ticketHash, 16);
         Ticket ticket = ticketRepository
-                .findByHash(hash)
+                .findByUniqueHash(ticketHash)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Cannot find ticket with hash = %d", ticketHash)));
         return TicketMapper.mapToDTO(ticket);
     }

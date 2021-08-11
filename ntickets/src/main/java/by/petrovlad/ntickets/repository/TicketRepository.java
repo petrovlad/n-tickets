@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface TicketRepository extends CrudRepository<Ticket, Long> {
     Iterable<Ticket> findAllByAuthorId(Long authorId);
-    Optional<Ticket> findByHash(Integer hash);
+    Optional<Ticket> findByUniqueHash(String hash);
 }

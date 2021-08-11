@@ -8,6 +8,9 @@ import by.petrovlad.ntickets.repository.UserRepository;
 import by.petrovlad.ntickets.service.TicketsService;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.Timestamp;
 import java.time.Instant;
 import java.util.List;
@@ -56,8 +59,7 @@ public class TicketsServiceImpl implements TicketsService {
     }
 
     public String generateUniqueHash(TicketDTO dto) {
-        return Integer.toHexString((dto.getAuthorId()).hashCode())
-                + Integer.toHexString(dto.getContent().hashCode())
-                + Long.toHexString(Instant.now().toEpochMilli() << 27);
+        return Long.toHexString((long) Objects.hashCode(dto) << 32
+                | (Instant.now().toEpochMilli()));
     }
 }
