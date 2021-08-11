@@ -7,7 +7,6 @@ public class TicketMapper {
     public static Ticket mapToTicket(TicketDTO dto) {
         Ticket ticket = new Ticket();
 
-        ticket.setId(dto.getId());
         ticket.setAuthorId(dto.getAuthorId());
         ticket.setTitle(dto.getTitle());
         ticket.setContent(dto.getContent());
@@ -21,7 +20,6 @@ public class TicketMapper {
     public static TicketDTO mapToDTO(Ticket ticket) {
         TicketDTO dto = new TicketDTO();
 
-        dto.setId(ticket.getId());
         dto.setAuthorId(ticket.getAuthorId());
         dto.setTitle(ticket.getTitle());
         dto.setContent(ticket.getContent());

@@ -45,6 +45,8 @@ public class TicketsServiceImpl implements TicketsService {
     @Override
     // check if user exists
     public TicketDTO createTicket(TicketDTO dto) {
+        // generate empty(or not?) hash value
+        dto.setHash(Integer.toHexString(dto.hashCode()));
         Ticket ticket = TicketMapper.mapToTicket(dto);
         ticket = ticketRepository.save(ticket);
         return TicketMapper.mapToDTO(ticket);

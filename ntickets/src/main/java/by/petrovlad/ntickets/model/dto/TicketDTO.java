@@ -1,21 +1,16 @@
 package by.petrovlad.ntickets.model.dto;
 
+import by.petrovlad.ntickets.model.entity.Ticket;
+
+import java.util.Objects;
+
 public class TicketDTO {
-    private Long id;
     private Long authorId;
     private String title;
     private String content;
     private Boolean showWarning;
     private Integer readingsCount;
     private String hash;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Long getAuthorId() {
         return authorId;
@@ -65,5 +60,23 @@ public class TicketDTO {
         this.hash = hash;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        TicketDTO ticket = (TicketDTO) obj;
+        return authorId.equals(ticket.authorId)
+                && title.equals(ticket.title)
+                && content.equals(ticket.content)
+                && readingsCount.equals(ticket.readingsCount);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.authorId, this.title, this.content);
+    }
 }
