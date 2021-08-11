@@ -1,6 +1,7 @@
 package by.petrovlad.ntickets.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -54,11 +55,30 @@ public class User {
         this.password = password;
     }
 
-
     public User() {}
+
     public User(String login, String email, String password) {
         this.login = login;
         this.email = email;
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        User user = (User) obj;
+        return id.equals(user.id)
+                && login.equals(user.login)
+                && email.equals(user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email);
     }
 }

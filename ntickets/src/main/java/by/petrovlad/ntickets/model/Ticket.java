@@ -1,6 +1,7 @@
 package by.petrovlad.ntickets.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tickets")
@@ -24,7 +25,18 @@ public class Ticket {
 
     @Column(name = "t_reads_count", nullable = false)
     private Integer readingsCount;
-    // expiration date
+
+    @Column(name = "t_hash", nullable = false)
+    private Integer hash;
+// expiration date
+
+    public Integer getHash() {
+        return hash;
+    }
+
+    public void setHash(Integer hash) {
+        this.hash = hash;
+    }
 
     public Long getId() {
         return id;
@@ -82,5 +94,27 @@ public class Ticket {
         this.content = content;
         this.showWarning = showWarning;
         this.readingsCount = readingsCount;
+        this.hash = hashCode();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id, this.authorId, this.content);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Ticket ticket = (Ticket) obj;
+        return id.equals(ticket.id)
+                && authorId.equals(ticket.authorId)
+                && title.equals(ticket.title)
+                && content.equals(ticket.content)
+                && readingsCount.equals(ticket.readingsCount);
     }
 }
