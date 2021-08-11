@@ -20,18 +20,19 @@ public class ShowTicketServiceImpl implements ShowTicketService {
     }
 
     @Override
-    public TicketDTO getTicket(Long ticketId) throws ResourceNotFoundException {
-        Ticket ticket = ticketRepository
-                .findById(ticketId)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Cannot find ticket with id = %d", ticketId)));
-        return TicketMapper.mapToDTO(ticket);
-    }
-
-    @Override
     public TicketDTO getTicket(String ticketHash) throws ResourceNotFoundException {
         Ticket ticket = ticketRepository
                 .findByUniqueHash(ticketHash)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Cannot find ticket with hash = %d", ticketHash)));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Cannot find ticket with hash = %s", ticketHash)));
+
+        if (ticket.getReadingsCount() == 0) {
+            ticketRepository.delete(ticket);
+            throw new ResourceNotFoundException(String.format("Cannot find ticket with hash = %s", ticketHash));
+        }
+        // first we decrement readings counter, and then send it to client
+        ticket.setReadingsCount(ticket.getReadingsCount() - 1);
+        ticketRepository.save(ticket);
+
         return TicketMapper.mapToDTO(ticket);
     }
 }
