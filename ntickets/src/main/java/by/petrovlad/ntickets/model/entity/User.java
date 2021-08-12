@@ -1,7 +1,10 @@
 package by.petrovlad.ntickets.model.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -22,6 +25,13 @@ public class User {
 
     @Column(name = "u_password", nullable = false)
     private String password;
+
+    @ManyToMany
+    @JoinTable(name = "users_m2m_roles",
+            joinColumns = @JoinColumn(name = "u2r_user_id"),
+            inverseJoinColumns = @JoinColumn(name = "u2r_role_id")
+    )
+    private Set<Role> roleSet = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -55,13 +65,15 @@ public class User {
         this.password = password;
     }
 
-    public User() {}
-
-    public User(String login, String email, String password) {
-        this.login = login;
-        this.email = email;
-        this.password = password;
+    public Set<Role> getRoleSet() {
+        return roleSet;
     }
+
+    public void setRoleSet(Set<Role> roleSet) {
+        this.roleSet = roleSet;
+    }
+
+    public User() {}
 
     @Override
     public boolean equals(Object obj) {
