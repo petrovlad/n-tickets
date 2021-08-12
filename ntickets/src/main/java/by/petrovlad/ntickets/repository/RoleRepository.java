@@ -1,7 +1,7 @@
 package by.petrovlad.ntickets.repository;
 
 import by.petrovlad.ntickets.model.entity.Role;
-import by.petrovlad.ntickets.model.util.ERole;
+import by.petrovlad.ntickets.model.util.RoleType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Integer> {
-    Optional<Role> findByName(ERole name);
+    Optional<Role> findByName(RoleType name);
 }

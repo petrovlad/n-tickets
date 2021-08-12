@@ -1,7 +1,6 @@
 package by.petrovlad.ntickets.model.entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -13,12 +12,12 @@ import java.util.Set;
 })
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "u_id")
     private Long id;
 
     @Column(name = "u_login", nullable = false)
-    private String login;
+    private String username;
 
     @Column(name = "u_email", nullable = false)
     private String email;
@@ -41,12 +40,12 @@ public class User {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -69,6 +68,14 @@ public class User {
         return roleSet;
     }
 
+    public User(Long id, String username, String email, String password, Set<Role> roleSet) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.roleSet = roleSet;
+    }
+
     public void setRoleSet(Set<Role> roleSet) {
         this.roleSet = roleSet;
     }
@@ -85,7 +92,7 @@ public class User {
         }
         User user = (User) obj;
         return id.equals(user.id)
-                && login.equals(user.login)
+                && username.equals(user.username)
                 && email.equals(user.email);
     }
 

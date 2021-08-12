@@ -1,6 +1,6 @@
 package by.petrovlad.ntickets.model.entity;
 
-import by.petrovlad.ntickets.model.util.ERole;
+import by.petrovlad.ntickets.model.util.RoleType;
 
 import javax.persistence.*;
 
@@ -9,13 +9,13 @@ import javax.persistence.*;
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "r_id")
     private Integer id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "r_name", length = 20, nullable = false)
-    private ERole name;
+    private RoleType name;
 
     public Role() {}
 
@@ -27,11 +27,11 @@ public class Role {
         this.id = id;
     }
 
-    public ERole getName() {
+    public RoleType getName() {
         return name;
     }
 
-    public void setName(ERole name) {
+    public void setName(RoleType name) {
         this.name = name;
     }
 }

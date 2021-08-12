@@ -87,7 +87,7 @@ public class TicketsServiceImpl implements TicketsService {
         }
     }
 
-    public String generateUniqueHash(TicketDTO dto) {
+    private String generateUniqueHash(TicketDTO dto) {
         return Long.toHexString((long) Objects.hashCode(dto) << 32
                 | (Instant.now().toEpochMilli()));
     }
