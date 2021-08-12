@@ -75,7 +75,7 @@ public class AuthServiceImpl implements AuthService {
         Set<String> strRoles = new HashSet<>(signUpRequest.getRoles());
         Set<Role> roles = new HashSet<>();
 
-        if (strRoles == null) {
+        if (strRoles.isEmpty()) {
             Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
@@ -104,7 +104,8 @@ public class AuthServiceImpl implements AuthService {
         User user = new User(null, signUpRequest.getUsername(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()), roles);
         user = userRepository.save(user);
 
-        Authentication authentication = authenticationManager.authenticate(
+        return signIn(new SignInRequestDTO(signUpRequest.getUsername(), signUpRequest.getPassword()));
+/*        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(signUpRequest.getUsername(), signUpRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -112,6 +113,6 @@ public class AuthServiceImpl implements AuthService {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        return new JwtResponseDTO(jwt, user.getId(), userDetails.getEmail(), userDetails.getUsername());
+        return new JwtResponseDTO(jwt, user.getId(), userDetails.getEmail(), userDetails.getUsername());*/
     }
 }

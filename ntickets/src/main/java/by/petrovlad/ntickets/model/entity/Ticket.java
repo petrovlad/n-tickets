@@ -7,7 +7,6 @@ import java.util.Objects;
 @Table(name = "tickets", uniqueConstraints = {
         @UniqueConstraint(columnNames = "t_hash")
 })
-//@JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

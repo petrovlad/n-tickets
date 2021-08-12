@@ -1,6 +1,5 @@
 package by.petrovlad.ntickets.security.jwt;
 
-import jdk.jfr.Category;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

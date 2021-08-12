@@ -1,8 +1,8 @@
 package by.petrovlad.ntickets.controller;
 
 import by.petrovlad.ntickets.model.dto.TicketDTO;
-import by.petrovlad.ntickets.model.entity.Ticket;
 import by.petrovlad.ntickets.service.TicketsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -14,6 +14,7 @@ public class TicketsController {
 
     private final TicketsService ticketsService;
 
+    @Autowired
     public TicketsController(TicketsService ticketsService) {
         this.ticketsService = ticketsService;
     }

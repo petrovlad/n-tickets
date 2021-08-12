@@ -1,7 +1,5 @@
 package by.petrovlad.ntickets.model.dto;
 
-import by.petrovlad.ntickets.model.entity.Ticket;
-
 import java.util.Objects;
 
 public class TicketDTO {
@@ -77,6 +75,6 @@ public class TicketDTO {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.authorId, this.title, this.content);
+        return Objects.hash(authorId, title, content);
     }
 }

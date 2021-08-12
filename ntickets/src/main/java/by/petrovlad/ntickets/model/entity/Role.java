@@ -19,6 +19,11 @@ public class Role {
 
     public Role() {}
 
+    public Role(Integer id, RoleType name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -33,5 +38,13 @@ public class Role {
 
     public void setName(RoleType name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return id.equals(role.id);
     }
 }
