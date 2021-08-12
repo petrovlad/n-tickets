@@ -15,7 +15,7 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "r_name", length = 20, nullable = false)
-    private ERole role;
+    private ERole name;
 
     public Role() {}
 
@@ -27,11 +27,11 @@ public class Role {
         this.id = id;
     }
 
-    public ERole getRole() {
-        return role;
+    public ERole getName() {
+        return name;
     }
 
-    public void setRole(ERole role) {
-        this.role = role;
+    public void setName(ERole name) {
+        this.name = name;
     }
 }
