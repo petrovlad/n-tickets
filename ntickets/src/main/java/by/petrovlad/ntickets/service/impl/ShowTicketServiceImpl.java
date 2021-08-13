@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ShowTicketServiceImpl implements ShowTicketService {
-    private static final String EXC_TICKET_NOT_FOUND = "Cannot find ticket with hash = ";
+    private static final String TICKET_NOT_FOUND_EXCEPTION = "Cannot find ticket with hash = ";
     private final TicketRepository ticketRepository;
 
     public ShowTicketServiceImpl(TicketRepository repository) {
@@ -21,11 +21,11 @@ public class ShowTicketServiceImpl implements ShowTicketService {
     public TicketDTO getTicket(String ticketHash) throws ResourceNotFoundException {
         Ticket ticket = ticketRepository
                 .findByUniqueHash(ticketHash)
-                .orElseThrow(() ->  new ResourceNotFoundException(EXC_TICKET_NOT_FOUND + ticketHash));
+                .orElseThrow(() ->  new ResourceNotFoundException(TICKET_NOT_FOUND_EXCEPTION + ticketHash));
 
         // if read's count is 0 then ticket is no longer available,
         // but we don't delete ticket from db (because we are sneaky boys), so we just don't send it to client
-        if (ticket.getReadingsCount() == 0) { throw new ResourceNotFoundException(EXC_TICKET_NOT_FOUND + ticketHash); }
+        if (ticket.getReadingsCount() == 0) { throw new ResourceNotFoundException(TICKET_NOT_FOUND_EXCEPTION + ticketHash); }
 
         // first we decrement readings counter, and then send it to the client
         ticket.setReadingsCount(ticket.getReadingsCount() - 1);
