@@ -106,7 +106,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User user = new User(null, signUpRequest.getUsername(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()), roles);
-        user = userRepository.save(user);
+        userRepository.save(user);
 
         return signIn(new SignInRequestDTO(signUpRequest.getUsername(), signUpRequest.getPassword()));
     }
