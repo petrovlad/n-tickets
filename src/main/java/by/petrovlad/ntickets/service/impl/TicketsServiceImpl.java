@@ -76,11 +76,11 @@ public class TicketsServiceImpl implements TicketsService {
             return createTicket(dto);
         } else {
             Ticket ticketDB = optTicket.get();
-            ticketDB.setAuthorId(ticket.getAuthorId());
-            ticketDB.setTitle(ticket.getTitle());
-            ticketDB.setContent(ticket.getContent());
-            ticketDB.setShowWarning(ticket.getShowWarning());
-            ticketDB.setReadingsCount(ticket.getReadingsCount());
+            ticketDB.setAuthorId(ticket.getAuthorId() == null ? ticketDB.getAuthorId() : ticket.getAuthorId());
+            ticketDB.setTitle(ticket.getTitle() == null ? ticketDB.getTitle() : ticket.getTitle());
+            ticketDB.setContent(ticket.getContent() == null ? ticketDB.getContent() : ticket.getContent());
+            ticketDB.setShowWarning(ticket.getShowWarning() == null ? ticketDB.getShowWarning() : ticket.getShowWarning());
+            ticketDB.setReadingsCount(ticket.getReadingsCount() == null ? ticketDB.getReadingsCount() : ticket.getReadingsCount());
 
             ticketRepository.save(ticketDB);
             return TicketMapper.mapToDTO(ticketDB);
