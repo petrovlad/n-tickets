@@ -96,13 +96,18 @@ public class TicketsServiceImpl implements TicketsService {
             return createTicket(dto);
         } else {
             Ticket ticketDB = optTicket.get();
-            ticketDB.setAuthorId(ticket.getAuthorId() == null ? ticketDB.getAuthorId() : ticket.getAuthorId());
-            ticketDB.setTitle(ticket.getTitle() == null ? ticketDB.getTitle() : ticket.getTitle());
-            ticketDB.setContent(ticket.getContent() == null ? ticketDB.getContent() : ticket.getContent());
-            ticketDB.setShowWarning(ticket.getShowWarning() == null ? ticketDB.getShowWarning() : ticket.getShowWarning());
-            ticketDB.setReadingsCount(ticket.getReadingsCount() == null ? ticketDB.getReadingsCount() : ticket.getReadingsCount());
 
-            ticketRepository.save(ticketDB);
+            UserDetailsImpl userDetails = getCurrentUserDetails();
+            // only owner can change ticket
+            if (ticketDB.getAuthorId().equals(userDetails.getId())) {
+                ticketDB.setAuthorId(ticket.getAuthorId() == null ? ticketDB.getAuthorId() : ticket.getAuthorId());
+                ticketDB.setTitle(ticket.getTitle() == null ? ticketDB.getTitle() : ticket.getTitle());
+                ticketDB.setContent(ticket.getContent() == null ? ticketDB.getContent() : ticket.getContent());
+                ticketDB.setShowWarning(ticket.getShowWarning() == null ? ticketDB.getShowWarning() : ticket.getShowWarning());
+                ticketDB.setReadingsCount(ticket.getReadingsCount() == null ? ticketDB.getReadingsCount() : ticket.getReadingsCount());
+
+                ticketRepository.save(ticketDB);
+            }
             return TicketMapper.mapToDTO(ticketDB);
         }
     }
@@ -111,6 +116,7 @@ public class TicketsServiceImpl implements TicketsService {
         return (UserDetailsImpl) SecurityContextHolder
                 .getContext().getAuthentication().getPrincipal();
     }
+
     private String generateUniqueHash(TicketDTO dto) {
         return Long.toHexString((long) Objects.hashCode(dto) << 32
                 | (Instant.now().toEpochMilli()));
