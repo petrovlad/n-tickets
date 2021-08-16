@@ -1,18 +1,26 @@
 package by.petrovlad.ntickets.service.impl;
 
+import by.petrovlad.ntickets.exception.ResourceNotFoundException;
 import by.petrovlad.ntickets.model.dto.TicketDTO;
 import by.petrovlad.ntickets.model.entity.Ticket;
+import by.petrovlad.ntickets.model.entity.User;
 import by.petrovlad.ntickets.model.mapper.TicketMapper;
 import by.petrovlad.ntickets.repository.TicketRepository;
 import by.petrovlad.ntickets.repository.UserRepository;
+import by.petrovlad.ntickets.security.service.UserDetailsImpl;
 import by.petrovlad.ntickets.service.TicketsService;
 import by.petrovlad.ntickets.service.util.IterableUtil;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static by.petrovlad.ntickets.model.util.RoleType.ROLE_ADMIN;
 
 @Service
 public class TicketsServiceImpl implements TicketsService {
@@ -26,13 +34,21 @@ public class TicketsServiceImpl implements TicketsService {
 
     @Override
     public List<TicketDTO> getTickets() {
-        return IterableUtil.asList(ticketRepository.findAll(),
-                (Ticket t) -> t.getReadingsCount() > 0,
-                TicketMapper::mapToDTO);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl)authentication.getPrincipal();
+        if (userDetails.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals(ROLE_ADMIN.name()))) {
+            // if the user has role 'ADMIN', then return all tickets
+            return IterableUtil.asList(ticketRepository.findAll(),
+                    (Ticket t) -> t.getReadingsCount() > 0,
+                    TicketMapper::mapToDTO);
+        } else {
+            // otherwise, return only specific user tickets
+            return getTickets(userDetails.getId());
+        }
     }
 
     @Override
-    // handle 0
     public List<TicketDTO> getTickets(Long authorId) {
         return IterableUtil.asList(ticketRepository.findAllByAuthorId(authorId),
                 (Ticket t) -> t.getReadingsCount() > 0,
@@ -45,7 +61,11 @@ public class TicketsServiceImpl implements TicketsService {
         // generate empty(or not?) hash value
         dto.setUniqueHash(generateUniqueHash(dto));
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl)authentication.getPrincipal();
+
         Ticket ticket = TicketMapper.mapToTicket(dto);
+        ticket.setAuthorId(userDetails.getId());
         ticket = ticketRepository.save(ticket);
         return TicketMapper.mapToDTO(ticket);
     }
