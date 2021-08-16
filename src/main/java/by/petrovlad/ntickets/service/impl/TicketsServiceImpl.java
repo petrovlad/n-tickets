@@ -34,8 +34,7 @@ public class TicketsServiceImpl implements TicketsService {
 
     @Override
     public List<TicketDTO> getTickets() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl)authentication.getPrincipal();
+        UserDetailsImpl userDetails = getCurrentUserDetails();
         if (userDetails.getAuthorities().stream()
                 .anyMatch(authority -> authority.getAuthority().equalsIgnoreCase(ROLE_ADMIN.name()))) {
             // if the user has role 'ADMIN', then return all tickets
@@ -61,8 +60,7 @@ public class TicketsServiceImpl implements TicketsService {
         // generate empty(or not?) hash value
         dto.setUniqueHash(generateUniqueHash(dto));
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl)authentication.getPrincipal();
+        UserDetailsImpl userDetails = getCurrentUserDetails();
 
         Ticket ticket = TicketMapper.mapToTicket(dto);
         ticket.setAuthorId(userDetails.getId());
@@ -72,14 +70,16 @@ public class TicketsServiceImpl implements TicketsService {
 
     @Override
     public void deleteTicket(Long id) {
-        if (ticketRepository.existsById(id)) {
+        UserDetailsImpl userDetails = getCurrentUserDetails();
+        if (ticketRepository.existsByIdAndAuthorId(id, userDetails.getId())) {
             ticketRepository.deleteById(id);
         }
     }
 
     @Override
     public void deleteTicket(String hash) {
-        if (ticketRepository.existsByUniqueHash(hash)) {
+        UserDetailsImpl userDetails = getCurrentUserDetails();
+        if (ticketRepository.existsByUniqueHashAndAuthorId(hash, userDetails.getId())) {
             ticketRepository.deleteByUniqueHash(hash);
         }
     }
@@ -107,6 +107,10 @@ public class TicketsServiceImpl implements TicketsService {
         }
     }
 
+    private UserDetailsImpl getCurrentUserDetails() {
+        return (UserDetailsImpl) SecurityContextHolder
+                .getContext().getAuthentication().getPrincipal();
+    }
     private String generateUniqueHash(TicketDTO dto) {
         return Long.toHexString((long) Objects.hashCode(dto) << 32
                 | (Instant.now().toEpochMilli()));

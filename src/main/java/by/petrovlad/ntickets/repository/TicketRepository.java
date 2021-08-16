@@ -14,4 +14,6 @@ public interface TicketRepository extends CrudRepository<Ticket, Long> {
     @Transactional
     void deleteByUniqueHash(String hash);
     boolean existsByUniqueHash(String hash);
+    boolean existsByUniqueHashAndAuthorId(String hash, Long authorId);
+    boolean existsByIdAndAuthorId(Long id, Long authorId);
 }
