@@ -3,6 +3,7 @@ package by.petrovlad.ntickets.security;
 import by.petrovlad.ntickets.security.jwt.JwtAuthTokenFilter;
 import by.petrovlad.ntickets.security.jwt.JwtAuthEntryPoint;
 import by.petrovlad.ntickets.security.service.UserDetailsServiceImpl;
+import by.petrovlad.ntickets.common.RegularExpressions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,6 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .exceptionHandling().authenticationEntryPoint(authEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/auth/**").permitAll()
+                .regexMatchers(String.format("/ticket-%s", RegularExpressions.HASH_REGEX)).permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
