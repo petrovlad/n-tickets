@@ -1,5 +1,6 @@
 package by.petrovlad.ntickets.service.impl;
 
+import antlr.collections.List;
 import by.petrovlad.ntickets.exception.UserExistsException;
 import by.petrovlad.ntickets.model.dto.JwtResponseDTO;
 import by.petrovlad.ntickets.model.dto.SignInRequestDTO;
@@ -19,7 +20,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.expression.Lists;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -75,35 +78,14 @@ public class AuthServiceImpl implements AuthService {
             throw new UserExistsException(EMAIL_EXISTS_EXCEPTION.formatted(signUpRequest.getEmail()));
         }
 
-        // Create new user's account
-        Set<String> strRoles = new HashSet<>(signUpRequest.getRoles());
+        // Create new user account
         Set<Role> roles = new HashSet<>();
-
-        if (strRoles.isEmpty()) {
-            Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
+        // Every registered user will have 'user' role by default
+        // changing roleset possible only via changing it in database
+        // otherwise anyone can add to himself 'admin' role
+        Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin" -> {
-                        Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-                    }
-                    case "moderator" -> {
-                        Role modRole = roleRepository.findByName(RoleType.ROLE_MODERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(modRole);
-                    }
-                    default -> {
-                        Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                    }
-                }
-            });
-        }
+        roles.add(userRole);
 
         User user = new User(null, signUpRequest.getUsername(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()), roles);
         userRepository.save(user);
